@@ -25,7 +25,7 @@ fn handle_request(mut stream:TcpStream){
 
     let header=ResponseHeaderV0::new(7);
     let response=Response::new(0, header, String::new());
-    if let Err(e)= stream.write_all(response.to_string().as_bytes()){
+    if let Err(e)= stream.write_all(&response.to_bytes()){
         println!("Error writing to stream: {}",e);
     }
 }
