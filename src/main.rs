@@ -37,6 +37,11 @@ fn handle_request(mut stream:TcpStream){
 }
 
 fn parse_request(mut buf_reader:BufReader<&TcpStream>)->Request{
+
+    let mut buf =[0u8;4];
+    buf_reader.read_exact(&mut buf).unwrap();
+    let message_size = i32::from_be_bytes(buf);
+
     let mut buf = [0u8; 2];
     buf_reader.read_exact(&mut buf).unwrap();
     let request_api_key = i16::from_be_bytes(buf);
@@ -51,7 +56,9 @@ fn parse_request(mut buf_reader:BufReader<&TcpStream>)->Request{
  
     let client_id=String::new();
 
-    Request { request_api_key,
+    Request { 
+        message_size,
+        request_api_key,
          request_api_version, 
          correlation_id, 
          client_id }
